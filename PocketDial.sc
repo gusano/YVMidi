@@ -113,17 +113,13 @@ PocketDial : YVMidiController {
     // faster than calling get() on a param for every new CC value (nudgeSet).
     updateProxyParams { |proxy, bank=nil, offset=nil|
         var pairs = proxy.getKeysValues;
-        var dict  = proxyParamsDict[proxy] ?? ();
+        //var dict  = proxyParamsDict[proxy] ?? ();
+        var dict  = ();
 
         try {
             if (bank.notNil, { // 1st update
                 pairs.do{|p, i|
                     var ccKey = this.getCCKey(i, bank, offset);
-                    // remove old key if any
-                    if (dict[p[0]].notNil, {
-                        this.mapCC(dict[p[0]][\key], nil);
-                        dict[p[0]][\key] = nil;
-                    });
                     dict.add( p[0] -> (\key: ccKey, \val: p[1]) );
                 };
                 proxyParamsDict[proxy] = dict;
@@ -151,9 +147,9 @@ PocketDial : YVMidiController {
 
         this.checkParamsSize(pparams.size);
 
-        if (proxyParamsDict[proxy].isNil or: { resetDict[proxy] != true }, {
-            this.updateProxyParams(proxy, bank, offset)
-        });
+        //if (proxyParamsDict[proxy].isNil or: { resetDict[proxy] != true }, {
+        this.updateProxyParams(proxy, bank, offset);
+        //});
 
         // use name as symbol String
         proxyName = this.fixName(proxy);
